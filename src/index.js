@@ -13,7 +13,7 @@ const httpServer = createServer(app);
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, ''),
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 };
