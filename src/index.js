@@ -114,16 +114,28 @@ app.get('/api/rooms/:code', async (req, res) => {
     const { code } = req.params;
     const room = rooms.get(code);
     
-    if (!room) {
-      const { data, error } = await supabase
-        .from('rooms')
-        .select('*')
-        .eq('code', code)
-        .single();
-
-      if (error) throw error;
-      res.json(data);
+    if (room) {
+      res.json({
+        ...room, // Basic room info
+        players: room.players.map(p => ({
+            id: p.id,
+            nickname: p.nickname,
+            avatar: p.avatar,
+            score: p.score
+        }))
+      });
+      return;
     }
+
+    const { data, error } = await supabase
+      .from('rooms')
+      .select('*')
+      .eq('code', code)
+      .single();
+
+    if (error) throw error;
+    res.json(data);
+
   } catch (error) {
     res.status(404).json({ error: 'Room not found' });
   }
