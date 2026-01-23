@@ -21,8 +21,7 @@ const httpServer = createServer(app);
 const allowedOrigins = [
   'http://localhost:5173',
   'https://gameqa.vercel.app',
-  'http://54.179.45.34',      // เพิ่ม IP ของ EC2 (ถ้ามีการเรียกจาก IP เข้าหาตัวเอง)
-  'http://54.179.45.34:3001'
+  'https://repeated-sum-amp-buying.trycloudflare.com' 
 ];
 
 app.use(cors({
