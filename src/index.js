@@ -20,15 +20,18 @@ const httpServer = createServer(app);
  
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://gameqa.vercel.app'
+  'https://gameqa.vercel.app',
+  'http://54.179.45.34',      // เพิ่ม IP ของ EC2 (ถ้ามีการเรียกจาก IP เข้าหาตัวเอง)
+  'http://54.179.45.34:3001'
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow postman / curl
+    // allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
+    // ตรวจสอบว่า origin อยู่ในรายการที่อนุญาตหรือไม่
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
       return callback(null, true);
     }
 
