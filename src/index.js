@@ -17,19 +17,42 @@ const app = express();
 const httpServer = createServer(app);
 
 // CORS Configuration
-const corsOptions = {
-  origin: (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, ''),
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-};
+ 
+const allowedOrigins = [ 
+  'http://localhost:5173',
+  'https://gameqa.vercel.app'
+];
 
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow non-browser tools (postman, curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed: ' + origin));
+    }
+  },
+  credentials: true
+}));
+
+app.options('*', cors()); // 👈 สำคัญมาก (preflight) 
 app.use(express.json());
 
 // Socket.IO Configuration
+// const io = new Server(httpServer, {
+//   cors: corsOptions
+// });
+
 const io = new Server(httpServer, {
-  cors: corsOptions
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
 });
+
 
 // Supabase Client
 const supabase = createClient(
