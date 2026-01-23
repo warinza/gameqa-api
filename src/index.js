@@ -18,33 +18,30 @@ const httpServer = createServer(app);
 
 // CORS Configuration
  
-const allowedOrigins = [ 
+const allowedOrigins = [
   'http://localhost:5173',
   'https://gameqa.vercel.app'
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow non-browser tools (postman, curl)
+    // allow postman / curl
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS not allowed: ' + origin));
+      return callback(null, true);
     }
+
+    return callback(new Error('CORS not allowed: ' + origin));
   },
   credentials: true
 }));
 
-app.options('*', cors()); // 👈 สำคัญมาก (preflight) 
+app.options('*', cors());
 app.use(express.json());
 
-// Socket.IO Configuration
-// const io = new Server(httpServer, {
-//   cors: corsOptions
-// });
 
+ 
 const io = new Server(httpServer, {
   cors: {
     origin: allowedOrigins,
