@@ -8,10 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 dotenv.config(); 
 
-console.log('ENV CHECK:', {
-  SUPABASE_URL: process.env.SUPABASE_URL,
-  FRONTEND_URL: process.env.FRONTEND_URL
-});
+// console.log('ENV CHECK:', {
+//   SUPABASE_URL: process.env.SUPABASE_URL,
+//   FRONTEND_URL: process.env.FRONTEND_URL
+// });
 
 const app = express();
 const httpServer = createServer(app);
